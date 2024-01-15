@@ -22,14 +22,14 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
+        val loginViewModel =
             ViewModelProvider(this).get(LoginViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
+        loginViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
