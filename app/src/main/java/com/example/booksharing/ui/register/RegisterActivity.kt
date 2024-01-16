@@ -48,7 +48,6 @@ class RegisterActivity : AppCompatActivity() {
             else{
                 findAvailableId(id)
                 while(foundId){
-                    foundId = false
                     id++
                     findAvailableId(id)
                 }
@@ -75,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
                 foundId = true
             }
         }
-        catch(e:Exception) {}
+        catch(e:Exception) {foundId=false}
     }
     private fun registerAccount(account:Account) = CoroutineScope(Dispatchers.IO).launch {
         try{
