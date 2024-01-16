@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_login"
-        android:name="com.example.booksharing.ui.login.LoginFragment"
+        android:name="com.example.booksharing.ui.account.AccountFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/activity_login" />
 
     <fragment
         android:id="@+id/nav_library"
