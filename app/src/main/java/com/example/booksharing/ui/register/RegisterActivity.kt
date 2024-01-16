@@ -54,6 +54,8 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 val account = Account(id,username,email,password)
                 registerAccount(account)
+                startActivity(Intent(this@RegisterActivity,MainActivity::class.java))
+                finish()
             }
         }
 
