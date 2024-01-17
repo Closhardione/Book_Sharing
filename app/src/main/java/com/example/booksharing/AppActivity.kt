@@ -10,10 +10,22 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.booksharing.databinding.ActivityAppBinding
-import com.example.booksharing.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
-class AppActivity:AppCompatActivity() {
+import com.example.booksharing.ui.firebase_data.Account
+
+//class AppActivity : AppCompatActivity() {
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_app)
+//
+//        val toolbar: Toolbar = findViewById(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//    }
+//}
+class AppActivity(account: Account):AppCompatActivity() {
+    private var currentAccount:Account = account
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAppBinding
     //private lateinit var database: Firebase.firestore
@@ -24,7 +36,7 @@ class AppActivity:AppCompatActivity() {
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.appBarApp.toolbar)
 
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -34,7 +46,7 @@ class AppActivity:AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_login, R.id.nav_library, R.id.nav_search
+                R.id.nav_account, R.id.nav_library, R.id.nav_search
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -43,7 +55,7 @@ class AppActivity:AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.app, menu)
         return true
     }
 

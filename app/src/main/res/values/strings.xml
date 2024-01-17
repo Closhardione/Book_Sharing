@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Ustawienia</string>
 
-    <string name="menu_home">Konto</string>
-    <string name="menu_gallery">Biblioteka</string>
-    <string name="menu_slideshow">Szukaj książek</string>
+    <string name="menu_account">Konto</string>
+    <string name="menu_library">Biblioteka</string>
+    <string name="menu_search">Szukaj książek</string>
 </resources>

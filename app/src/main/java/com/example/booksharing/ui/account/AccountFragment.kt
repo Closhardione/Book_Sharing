@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.booksharing.R
+import com.example.booksharing.ui.firebase_data.Account
 
-class AccountFragment : Fragment() {
+class AccountFragment(account:Account) : Fragment() {
+    private var currentAccount:Account = account
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

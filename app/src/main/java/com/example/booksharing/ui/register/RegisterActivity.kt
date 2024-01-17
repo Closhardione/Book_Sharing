@@ -25,8 +25,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var editTextPasswordRepeat: EditText
     private lateinit var buttonRegister: Button
     private lateinit var buttonReturn: Button
-    private var foundId: Boolean = false
-    private var id: Int = 1;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -46,15 +44,8 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterActivity,"Hasła muszą być identyczne!",Toast.LENGTH_LONG).show()
             }
             else{
-                findAvailableId(id)
-                while(foundId){
-                    id++
-                    findAvailableId(id)
-                }
-                val account = Account(id,username,email,password)
+                val account = Account(username,email,password)
                 registerAccount(account)
-                startActivity(Intent(this@RegisterActivity,MainActivity::class.java))
-                finish()
             }
         }
 
@@ -63,24 +54,23 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
     }
-    private fun findAvailableId(id:Int) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val querySnapshot = accountCollection.whereEqualTo("id",id).get().await()
+    private fun registerAccount(account:Account) = CoroutineScope(Dispatchers.IO).launch {
+        try{
             var counter = 0
+            val querySnapshot = accountCollection.whereEqualTo("username",account.username).get().await()
             for(document in querySnapshot.documents){
                 counter++
             }
-            if (counter>0){
-                foundId = true
+            if(counter == 0){
+                accountCollection.add(account).await()
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@RegisterActivity,"Zarejestrowano!",Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@RegisterActivity,MainActivity::class.java))
+                    finish()
+                }
             }
-        }
-        catch(e:Exception) {foundId=false}
-    }
-    private fun registerAccount(account:Account) = CoroutineScope(Dispatchers.IO).launch {
-        try{
-            accountCollection.add(account).await()
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@RegisterActivity,"Zarejestrowano!",Toast.LENGTH_SHORT).show()
+            else{
+                throw Exception("Użyj innej nazwy użytkownika!")
             }
         }
         catch(e:Exception){
