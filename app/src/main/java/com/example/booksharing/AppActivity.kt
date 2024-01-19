@@ -24,8 +24,8 @@ import com.example.booksharing.ui.firebase_data.Account
 //        setSupportActionBar(toolbar)
 //    }
 //}
-class AppActivity(account: Account):AppCompatActivity() {
-    private var currentAccount:Account = account
+class AppActivity/*(account: Account)*/:AppCompatActivity() {
+    //private var currentAccount:Account = account
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAppBinding
     //private lateinit var database: Firebase.firestore

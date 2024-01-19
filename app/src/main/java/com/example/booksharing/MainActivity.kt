@@ -10,6 +10,7 @@ import com.example.booksharing.ui.firebase_data.Account
 import com.example.booksharing.ui.register.RegisterActivity
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
