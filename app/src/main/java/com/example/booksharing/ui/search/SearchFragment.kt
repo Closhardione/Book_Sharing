@@ -17,8 +17,8 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val root = inflater.inflate(R.layout.fragment_search,container,false)
+        val view = inflater.inflate(R.layout.fragment_search,container,false)
 
-        return root
+        return view
     }
 }

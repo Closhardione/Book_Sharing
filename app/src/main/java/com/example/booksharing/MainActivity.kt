@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,10 +25,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editTextPassword: EditText
     private lateinit var buttonLogin: Button
     private lateinit var buttonRegister: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
+
         editTextEmail = findViewById(R.id.editTextEmail)
         editTextPassword = findViewById(R.id.editTextPassword)
         buttonLogin = findViewById(R.id.buttonLogin)
@@ -36,36 +38,42 @@ class MainActivity : AppCompatActivity() {
         buttonLogin.setOnClickListener{
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
-
-            loginUser(email,password)
+            loginUser(email, password)
         }
+
         buttonRegister.setOnClickListener{
-            startActivity(Intent(this@MainActivity,RegisterActivity::class.java))
+            startActivity(Intent(this@MainActivity, RegisterActivity::class.java))
         }
     }
-    private fun loginUser(email: String, password: String) = CoroutineScope(Dispatchers.IO).launch{
-        try{
+
+    private fun loginUser(email: String, password: String) = CoroutineScope(Dispatchers.IO).launch {
+        try {
             var counter = 0
             val querySnapshot = accountCollection
                 .whereEqualTo("email", email)
                 .whereEqualTo("password", password).get().await()
+
+            var sb: String = "siema"
             for (document in querySnapshot.documents) {
+                val account = document.toObject<Account>()
+                sb = account?.username.toString()
                 counter++
             }
+
             if (counter != 0) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "Poprawnie zalogowano!", Toast.LENGTH_SHORT)
-                        .show()
-                    startActivity(Intent(this@MainActivity, AppActivity::class.java))
+                    Toast.makeText(this@MainActivity, "Poprawnie zalogowano!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@MainActivity, AppActivity::class.java)
+                    intent.putExtra("username", sb)
+                    startActivity(intent)
                     finish()
                 }
             } else {
                 throw Exception("Nie znaleziono konta o podanym adresie email i haśle")
             }
-        }
-        catch (e:Exception){
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@MainActivity,e.message,Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }

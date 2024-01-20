@@ -17,8 +17,8 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val root = inflater.inflate(R.layout.fragment_library,container,false)
+        val view = inflater.inflate(R.layout.fragment_library,container,false)
 
-        return root
+        return view
     }
 }
