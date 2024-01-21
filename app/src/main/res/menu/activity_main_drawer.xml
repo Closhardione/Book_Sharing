@@ -20,5 +20,9 @@
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_menu_notifications"
             android:title="@string/menu_notifications"/>
+        <item
+            android:id="@+id/nav_borrowed_books"
+            android:icon="@drawable/ic_menu_borrowed_books"
+            android:title="@string/menu_borrowed_books"/>
     </group>
 </menu>

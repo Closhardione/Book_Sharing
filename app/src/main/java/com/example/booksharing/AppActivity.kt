@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.booksharing.databinding.ActivityAppBinding
 import com.example.booksharing.ui.account.AccountFragment
+import com.example.booksharing.ui.borrowed.BorrowedFragment
 import com.example.booksharing.ui.library.LibraryFragment
 import com.example.booksharing.ui.notifications.NotificationFragment
 import com.example.booksharing.ui.search.SearchFragment
@@ -44,7 +45,7 @@ class AppActivity : AppCompatActivity() {
         }
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_account, R.id.nav_library, R.id.nav_search, R.id.nav_blank, R.id.nav_notifications
+                R.id.nav_account, R.id.nav_library, R.id.nav_search, R.id.nav_blank, R.id.nav_notifications,R.id.nav_borrowed_books
             ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -65,8 +66,13 @@ class AppActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                     true
                 }
-                R.id.nav_notifications ->{
+                R.id.nav_notifications -> {
                     navigateToNotificationsFragment()
+                    drawerLayout.closeDrawers()
+                    true
+                }
+                R.id.nav_borrowed_books -> {
+                    navigateToBorrowedFragment()
                     drawerLayout.closeDrawers()
                     true
                 }
@@ -74,6 +80,17 @@ class AppActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun navigateToBorrowedFragment() {
+        val fragment = BorrowedFragment()
+
+        val bundle = Bundle()
+        bundle.putString("username", profileName)
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_content_main,fragment).commit()
     }
 
     private fun navigateToNotificationsFragment() {

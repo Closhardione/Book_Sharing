@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.booksharing.R
 import com.example.booksharing.ui.firebase_data.ExchangeHistory
 import com.google.firebase.Firebase
@@ -13,6 +15,8 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class CustomAdapter(
     context: Context,
@@ -20,6 +24,8 @@ class CustomAdapter(
     private val data: List<ExchangeHistory>
 ) : ArrayAdapter<ExchangeHistory>(context, resource, data) {
     private val exchangeHistoryCollection = Firebase.firestore.collection("exchange_history")
+
+    private val booksCollection = Firebase.firestore.collection("books")
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
@@ -54,39 +60,56 @@ class CustomAdapter(
     }
 
     private fun rejectExchange(exchangeHistory: ExchangeHistory)= CoroutineScope(Dispatchers.IO).launch {
-        exchangeHistoryCollection
-            .whereEqualTo("title", exchangeHistory.title)
-            .whereEqualTo("author", exchangeHistory.author)
-            .whereEqualTo("date", exchangeHistory.date)
-            .whereEqualTo("bookOwner", exchangeHistory.bookOwner)
-            .whereEqualTo("bookborrower", exchangeHistory.bookborrower)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    exchangeHistoryCollection.document(document.id).update("state", "odrzucono")
-                }
+        try {
+            val querySnapshot = exchangeHistoryCollection
+                .whereEqualTo("title", exchangeHistory.title)
+                .whereEqualTo("author", exchangeHistory.author)
+                .whereEqualTo("date", exchangeHistory.date)
+                .whereEqualTo("bookOwner", exchangeHistory.bookOwner)
+                .whereEqualTo("bookborrower", exchangeHistory.bookborrower).get().await()
+            for (document in querySnapshot) {
+                exchangeHistoryCollection.document(document.id).update("state", "odrzucono")
             }
-            .addOnFailureListener { e ->
-                Log.e("CustomAdapter", "Błąd podczas akceptowania wymiany: ${e.message}")
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,"Odrzucono propozycję wymiany", Toast.LENGTH_SHORT).show()
             }
+
+        }
+        catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,e.message, Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 
     private fun acceptExchange(exchangeHistory: ExchangeHistory)= CoroutineScope(Dispatchers.IO).launch {
-        exchangeHistoryCollection
-            .whereEqualTo("title", exchangeHistory.title)
-            .whereEqualTo("author", exchangeHistory.author)
-            .whereEqualTo("date", exchangeHistory.date)
-            .whereEqualTo("bookOwner", exchangeHistory.bookOwner)
-            .whereEqualTo("bookborrower", exchangeHistory.bookborrower)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    exchangeHistoryCollection.document(document.id).update("state", "pożyczona")
-                }
+        try {
+            var querySnapshot = exchangeHistoryCollection
+                .whereEqualTo("title", exchangeHistory.title)
+                .whereEqualTo("author", exchangeHistory.author)
+                .whereEqualTo("date", exchangeHistory.date)
+                .whereEqualTo("bookOwner", exchangeHistory.bookOwner)
+                .whereEqualTo("bookborrower", exchangeHistory.bookborrower).get().await()
+            for (document in querySnapshot) {
+                exchangeHistoryCollection.document(document.id).update("state", "pożyczona")
             }
-            .addOnFailureListener { e ->
-                Log.e("CustomAdapter", "Błąd podczas akceptowania wymiany: ${e.message}")
+            querySnapshot = booksCollection.whereEqualTo("title",exchangeHistory.title)
+                .whereEqualTo("author",exchangeHistory.author)
+                .whereEqualTo("owner",exchangeHistory.bookOwner).get().await()
+            for(document in querySnapshot){
+                booksCollection.document(document.id).update("currentState","pożyczona")
             }
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,"Przyjęto ofertę wymiany", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,e.message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private class ViewHolder {

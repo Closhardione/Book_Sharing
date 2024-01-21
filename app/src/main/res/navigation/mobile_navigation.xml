@@ -31,4 +31,9 @@
         android:name="com.example.booksharing.ui.notifications.NotificationFragment"
         android:label="@string/menu_notifications"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/nav_borrowed_books"
+        android:name="com.example.booksharing.ui.borrowed.BorrowedFragment"
+        android:label="@string/menu_borrowed_books"
+        tools:layout="@layout/fragment_borrowed" />
 </navigation>
