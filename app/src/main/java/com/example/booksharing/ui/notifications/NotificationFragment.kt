@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 
 class NotificationFragment : Fragment() {
     private val exchangeHistoryCollection = Firebase.firestore.collection("exchange_history")
+    private lateinit var textViewNotification:TextView
     private lateinit var listViewNotification: ListView
     private var profileName:String? = null
     private lateinit var foundExchanges: MutableList<ExchangeHistory>
@@ -34,6 +35,7 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_notification, container, false)
+        textViewNotification = view.findViewById(R.id.textViewNotification)
         profileName = arguments?.getString("username")
         if (profileName != null) {
             Log.d("TAG", profileName!!)
