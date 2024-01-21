@@ -36,7 +36,7 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_library,container,false)
-        profileName = arguments?.getString("profileName")
+        profileName = arguments?.getString("username")
         textViewLibrary = view.findViewById(R.id.textViewLibrary)
         listViewBooks = view.findViewById(R.id.listViewBooks)
         listAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
