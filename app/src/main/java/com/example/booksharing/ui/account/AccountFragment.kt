@@ -27,7 +27,7 @@ class AccountFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_account, container, false)
         buttonAddBook = view.findViewById(R.id.buttonAddBook)
 
-        val profileName = arguments?.getString("profileName")
+        val profileName = arguments?.getString("username")
         if (profileName != null) {
             Log.d("TAG", profileName)
         }

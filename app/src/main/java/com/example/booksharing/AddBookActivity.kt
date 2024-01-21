@@ -30,35 +30,34 @@ class AddBookActivity : AppCompatActivity() {
     private lateinit var buttonAddBook: Button
     private var profileName: String? = null
     private var selectedGenre: String? = null
+    private lateinit var buttonReturn: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_book)
 
         editTextTitle = findViewById(R.id.editTextTitle)
         editTextAuthor = findViewById(R.id.editTextAuthor)
-        spinnerGenre = findViewById<Spinner>(R.id.spinnerGenre)
+        spinnerGenre = findViewById(R.id.spinnerGenre)
         editTextDescription = findViewById(R.id.editTextDescription)
         buttonAddBook = findViewById(R.id.buttonAddBook)
+        buttonReturn = findViewById(R.id.buttonReturn)
 
         profileName = intent.getStringExtra("username")
         if (profileName.isNullOrEmpty()) {
             profileName = "DefaultUsername"
         }
-
+        //Log.e("tag", profileName!!)
         val genres = arrayOf("Fantasy", "Science Fiction", "Romance", "Mystery", "Thriller", "Non-fiction")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genres)
         spinnerGenre.adapter = adapter
 
         spinnerGenre.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Pobierz wybrany element
                 selectedGenre = genres[position]
 
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Wywoływane, gdy nic nie zostało wybrane
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         })
 
         buttonAddBook.setOnClickListener{
@@ -68,6 +67,12 @@ class AddBookActivity : AppCompatActivity() {
             val description = editTextDescription.text.toString()
             val book = Book(title,author, genre!!,description, profileName!!,"Posiadana")
             addBook(book)
+        }
+        buttonReturn.setOnClickListener{
+            val intent = Intent(this@AddBookActivity,AppActivity::class.java)
+            intent.putExtra("username",profileName)
+            startActivity(intent)
+            finish()
         }
         //Log.e("tag", profileName!!)
     }

@@ -84,7 +84,7 @@ class AppActivity : AppCompatActivity() {
         val fragment = AccountFragment()
 
         val bundle = Bundle()
-        bundle.putString("profileName", profileName)
+        bundle.putString("username", profileName)
         fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
@@ -95,7 +95,7 @@ class AppActivity : AppCompatActivity() {
         val fragment = LibraryFragment()
 
         val bundle = Bundle()
-        bundle.putString("profileName", profileName)
+        bundle.putString("username", profileName)
         fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
@@ -105,7 +105,7 @@ class AppActivity : AppCompatActivity() {
         val fragment = SearchFragment()
 
         val bundle = Bundle()
-        bundle.putString("profileName", profileName)
+        bundle.putString("username", profileName)
         fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
