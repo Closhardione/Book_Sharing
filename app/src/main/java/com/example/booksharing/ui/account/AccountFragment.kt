@@ -1,5 +1,6 @@
 package com.example.booksharing.ui.account
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.booksharing.AddBookActivity
+import com.example.booksharing.AppActivity
 import com.example.booksharing.R
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -32,7 +35,9 @@ class AccountFragment : Fragment() {
             Log.e("tag","Error accessing username!")
         }
         buttonAddBook.setOnClickListener{
-
+            val intent = Intent(activity, AddBookActivity::class.java)
+            intent.putExtra("username", profileName)
+            startActivity(intent)
         }
         usernameTextView = view.findViewById(R.id.textViewUsername)
         usernameTextView.setText(profileName)

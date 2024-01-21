@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-
+//zmień wpisaywane dane, dodaj nr telefonu i lokalizację
 class RegisterActivity : AppCompatActivity() {
     private val accountCollection = Firebase.firestore.collection("accounts")
     private lateinit var editTextUsername: EditText

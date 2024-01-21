@@ -52,7 +52,7 @@ class AppActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_account -> {
-                    navigateToAccountFragment(profileName ?: "UserName")
+                    navigateToAccountFragment()
                     drawerLayout.closeDrawers()
                     true
                 }
@@ -80,7 +80,7 @@ class AppActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-    private fun navigateToAccountFragment(profileName: String) {
+    private fun navigateToAccountFragment() {
         val fragment = AccountFragment()
 
         val bundle = Bundle()
@@ -94,11 +94,19 @@ class AppActivity : AppCompatActivity() {
     private fun navigateToLibraryFragment(){
         val fragment = LibraryFragment()
 
+        val bundle = Bundle()
+        bundle.putString("profileName", profileName)
+        fragment.arguments = bundle
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment_content_main,fragment).commit()
     }
     private fun navigateToSearchFragment(){
         val fragment = SearchFragment()
+
+        val bundle = Bundle()
+        bundle.putString("profileName", profileName)
+        fragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment_content_main,fragment).commit()
