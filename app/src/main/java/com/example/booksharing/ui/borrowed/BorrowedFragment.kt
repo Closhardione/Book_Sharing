@@ -1,4 +1,4 @@
-package com.example.booksharing.ui
+package com.example.booksharing.ui.borrowed
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.booksharing.R
 
-class BlankFragment : Fragment() {
+
+class BorrowedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        val view = inflater.inflate(R.layout.fragment_borrowed, container, false)
+        return view
     }
+
 
 }

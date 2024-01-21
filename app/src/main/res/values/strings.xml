@@ -10,6 +10,7 @@
     <string name="menu_account">Konto</string>
     <string name="menu_library">Biblioteka</string>
     <string name="menu_search">Szukaj nowych książek</string>
+    <string name="menu_notifications">Powiadomienia</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_register">Zarejestruj się</string>
     <string name="title_activity_add_book">Dodaj nową książkę</string>

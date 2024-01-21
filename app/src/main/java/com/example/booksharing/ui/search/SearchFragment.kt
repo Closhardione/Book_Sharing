@@ -1,5 +1,9 @@
 package com.example.booksharing.ui.search
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +20,7 @@ import androidx.fragment.app.Fragment
 import com.example.booksharing.R
 import com.example.booksharing.ui.firebase_data.Account
 import com.example.booksharing.ui.firebase_data.Book
+import com.example.booksharing.ui.firebase_data.ExchangeHistory
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
@@ -24,15 +29,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SearchFragment : Fragment() {
     private val bookCollection = Firebase.firestore.collection("books")
     private val accountCollection = Firebase.firestore.collection("accounts")
+    private val exchangeHistoryCollection = Firebase.firestore.collection("exchange_history")
 
     private lateinit var textViewChose:TextView
     private lateinit var spinnerGenre: Spinner
     private lateinit var buttonSearch: Button
-    private lateinit var buttonBorrow: Button
     private lateinit var listViewBooks: ListView
     private lateinit var listAdapter: ArrayAdapter<String>
     private lateinit var account:Account
@@ -71,40 +79,52 @@ class SearchFragment : Fragment() {
 
         listViewBooks.setOnItemClickListener { parent, view, position, id ->
             val selectedBook = listAdapter.getItem(position)
-            val selectedBookString = "\"Tytuł\" - Autor \nOpis\nWłaściciel: Właściciel"
 
             val regexPattern = "\"(.*?)\" - (.*?)\\s*\\n(.*?)\\s*\\nWłaściciel: (.*)".toRegex()
 
             val matchResult = regexPattern.find(selectedBook.toString())
 
             if (matchResult != null) {
-                // Grupa 1: Tytuł
                 val title = matchResult.groupValues[1]
 
-                // Grupa 2: Autor
                 val author = matchResult.groupValues[2]
 
-                // Grupa 3: Opis
                 val description = matchResult.groupValues[3]
 
-                // Grupa 4: Właściciel
                 val owner = matchResult.groupValues[4]
 
-                // Wyświetlenie wyników
-                Log.d("cześci string","Tytuł: $title")
-                Log.d("cześci string","Autor: $author")
-                Log.d("cześci string","Opis: $description")
-                Log.d("cześci string","Właściciel: $owner")
+                Log.d("string","Title: $title")
+                Log.d("string","Author: $author")
+                Log.d("string","Description: $description")
+                Log.d("string","Owner: $owner")
+                createExchange(title,author,owner, profileName!!)
             } else {
-                Log.d("cześci string","Nieprawidłowy format danych książki.")
+                Log.d("string","Nieprawidłowy format danych książki.")
             }
-
         }
 
         buttonSearch.setOnClickListener{
             getUser()
         }
         return view
+    }
+    private fun createExchange(title:String,author:String,owner:String,borrower:String) = CoroutineScope(Dispatchers.IO).launch{
+        try {
+            val currentDate = Date()
+            val date = SimpleDateFormat("dd:MM:yyyy", Locale.getDefault())
+            val dateString = date.format(currentDate)
+            val exchange = ExchangeHistory(owner,borrower,title,author,dateString,"oczekuje",0)
+            exchangeHistoryCollection.add(exchange)
+            withContext(Dispatchers.Main){
+                Toast.makeText(requireContext(),"Wysłano ofertę pożyczenia książki",Toast.LENGTH_SHORT).show()
+            }
+        }
+        catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(requireContext(),e.message,Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
     private fun getUser()= CoroutineScope(Dispatchers.IO).launch{
         try{
@@ -155,7 +175,6 @@ class SearchFragment : Fragment() {
             }
         }
     }
-    //wywala błąd napraw zaraz
     private fun findRelatedBooks() = CoroutineScope(Dispatchers.IO).launch{
         try{
             foundBooks = mutableListOf()

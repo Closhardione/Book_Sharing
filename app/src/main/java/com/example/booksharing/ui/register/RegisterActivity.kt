@@ -1,7 +1,6 @@
 package com.example.booksharing.ui.register
 
 import android.Manifest
-import android.content.ContentProviderClient
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity

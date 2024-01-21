@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 .whereEqualTo("email", email)
                 .whereEqualTo("password", password).get().await()
 
-            var sb: String = "siema"
+            var sb= "TEST"
             for (document in querySnapshot.documents) {
                 val account = document.toObject<Account>()
                 sb = account?.username.toString()

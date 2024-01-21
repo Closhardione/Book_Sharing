@@ -1,10 +1,7 @@
 package com.example.booksharing
 
-import android.app.FragmentTransaction
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -13,15 +10,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.booksharing.R
 import com.example.booksharing.databinding.ActivityAppBinding
 import com.example.booksharing.ui.account.AccountFragment
 import com.example.booksharing.ui.library.LibraryFragment
+import com.example.booksharing.ui.notifications.NotificationFragment
 import com.example.booksharing.ui.search.SearchFragment
 import com.google.android.material.navigation.NavigationView
 
 class AppActivity : AppCompatActivity() {
-
+    companion object {
+        const val ACTION_SEND_NOTIFICATION = "com.example.booksharing.broadcastreceivers.ACTION_SEND_NOTIFICATION"
+    }
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAppBinding
@@ -45,7 +44,7 @@ class AppActivity : AppCompatActivity() {
         }
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_account, R.id.nav_library, R.id.nav_search, R.id.nav_blank
+                R.id.nav_account, R.id.nav_library, R.id.nav_search, R.id.nav_blank, R.id.nav_notifications
             ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -66,10 +65,26 @@ class AppActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                     true
                 }
+                R.id.nav_notifications ->{
+                    navigateToNotificationsFragment()
+                    drawerLayout.closeDrawers()
+                    true
+                }
                 // Dodaj inne przypadki, jeśli są potrzebne
                 else -> false
             }
         }
+    }
+
+    private fun navigateToNotificationsFragment() {
+        val fragment = NotificationFragment()
+
+        val bundle = Bundle()
+        bundle.putString("username", profileName)
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_content_main,fragment).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -3,7 +3,6 @@ package com.example.booksharing
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.view.get
 import com.example.booksharing.ui.firebase_data.Book
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore

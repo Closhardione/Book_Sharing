@@ -9,8 +9,7 @@ data class Book(
     var currentState: String=""
 ){
      fun toStringOwned(): String{
-        return "\"$title\"  $author $genre - $currentState\n" +
-                "$description"
+        return "\"$title\"  $author $genre - $currentState\n$description"
     }
     fun toStringBorrow(): String{
         return "\"$title\" - $author \n" +
