@@ -10,10 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.example.booksharing.R
-import com.example.booksharing.databinding.FragmentLibraryBinding
 import com.example.booksharing.ui.firebase_data.Book
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -39,7 +36,7 @@ class LibraryFragment : Fragment() {
         profileName = arguments?.getString("username")
         textViewLibrary = view.findViewById(R.id.textViewLibrary)
         listViewBooks = view.findViewById(R.id.listViewBooks)
-        listAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
+        listAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
         listViewBooks.adapter = listAdapter
         if (profileName != null) {
             Log.d("TAG", profileName!!)
@@ -54,7 +51,7 @@ class LibraryFragment : Fragment() {
     }
     private fun getBookList() = CoroutineScope(Dispatchers.IO).launch{
         try{
-            var bookList = mutableListOf<String>()
+            val bookList = mutableListOf<String>()
             if (profileName != null) {
                 Log.d("TAG", profileName!!)
             }
@@ -63,7 +60,7 @@ class LibraryFragment : Fragment() {
             }
             val querySnapshot = bookCollection.whereEqualTo("owner",profileName).get().await()
             for(document in querySnapshot){
-                var book  = document.toObject<Book>()
+                val book  = document.toObject<Book>()
                 bookList.add(book.toStringOwned())
             }
             withContext(Dispatchers.Main){
