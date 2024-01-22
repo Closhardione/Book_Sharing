@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 
 class AccountFragment : Fragment() {
     private val exchangeHistoryCollection = Firebase.firestore.collection("exchange_history")
@@ -78,11 +79,22 @@ class AccountFragment : Fragment() {
                 Log.e("tag",exchange.getExchangeEndDescription())
             }
             finalGrade /= counter
+            val decimalFormat = DecimalFormat("#.#")
+            val formattedGrade = decimalFormat.format(finalGrade)
             withContext(Dispatchers.Main) {
-                textViewGrade.text = "Średnia ocena użytkowników - $finalGrade"
-                listAdapterAccount.clear()
-                listAdapterAccount.addAll(foundExchanges)
-                listAdapterAccount.notifyDataSetChanged()
+                if(finalGrade.isNaN()){
+                    textViewGrade.text = "Średnia ocena użytkowników: brak danych"
+                    listAdapterAccount.clear()
+                    listAdapterAccount.addAll(foundExchanges)
+                    listAdapterAccount.notifyDataSetChanged()
+                }
+                else{
+                    textViewGrade.text = "Średnia ocena użytkowników: $formattedGrade"
+                    listAdapterAccount.clear()
+                    listAdapterAccount.addAll(foundExchanges)
+                    listAdapterAccount.notifyDataSetChanged()
+                }
+
             }
         }
         catch (e: Exception){
