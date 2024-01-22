@@ -161,8 +161,8 @@ class SearchFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 for (nearbyUser in nearbyUsersList) {
                     Log.d("TAG", "Nearby User: ${nearbyUser.username}")
-                    findRelatedBooks()
                 }
+                findRelatedBooks()
             }
 
         } catch (e: Exception) {

@@ -48,7 +48,6 @@ class AppActivity : AppCompatActivity() {
 
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        chechNewExchanges()
         setSupportActionBar(binding.appBarApp.toolbar)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -103,9 +102,11 @@ class AppActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        checkNewExchanges()
     }
 
-    private fun chechNewExchanges()= CoroutineScope(Dispatchers.IO).launch {
+    private fun checkNewExchanges()= CoroutineScope(Dispatchers.IO).launch {
         try {
             var counter =0
             val querySnapshot = exchangeHistoryCollection.whereEqualTo("bookOwner",profileName)
