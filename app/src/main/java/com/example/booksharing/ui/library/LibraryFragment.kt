@@ -25,7 +25,7 @@ class LibraryFragment : Fragment() {
     private val bookCollection = Firebase.firestore.collection("books")
     private lateinit var textViewLibrary: TextView
     private lateinit var listViewBooks: ListView
-    private lateinit var listAdapter: ArrayAdapter<String>
+    private lateinit var listAdapterLibrary: ArrayAdapter<String>
     private var profileName:String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,8 +36,8 @@ class LibraryFragment : Fragment() {
         profileName = arguments?.getString("username")
         textViewLibrary = view.findViewById(R.id.textViewLibrary)
         listViewBooks = view.findViewById(R.id.listViewBooks)
-        listAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
-        listViewBooks.adapter = listAdapter
+        listAdapterLibrary = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
+        listViewBooks.adapter = listAdapterLibrary
         if (profileName != null) {
             Log.d("TAG", profileName!!)
             getBookList()
@@ -52,21 +52,15 @@ class LibraryFragment : Fragment() {
     private fun getBookList() = CoroutineScope(Dispatchers.IO).launch{
         try{
             val bookList = mutableListOf<String>()
-            if (profileName != null) {
-                Log.d("TAG", profileName!!)
-            }
-            else{
-                Log.e("tag","Error accessing username!")
-            }
             val querySnapshot = bookCollection.whereEqualTo("owner",profileName).get().await()
             for(document in querySnapshot){
                 val book  = document.toObject<Book>()
                 bookList.add(book.toStringOwned())
             }
             withContext(Dispatchers.Main){
-                listAdapter.clear()
-                listAdapter.addAll(bookList)
-                listAdapter.notifyDataSetChanged()
+                listAdapterLibrary.clear()
+                listAdapterLibrary.addAll(bookList)
+                listAdapterLibrary.notifyDataSetChanged()
             }
         }
         catch (e: Exception){

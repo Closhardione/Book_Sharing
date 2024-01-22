@@ -1,9 +1,5 @@
 package com.example.booksharing.ui.search
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,7 +38,7 @@ class SearchFragment : Fragment() {
     private lateinit var spinnerGenre: Spinner
     private lateinit var buttonSearch: Button
     private lateinit var listViewBooks: ListView
-    private lateinit var listAdapter: ArrayAdapter<String>
+    private lateinit var listAdapterSearch: ArrayAdapter<String>
     private lateinit var account:Account
     private lateinit var nearbyUsersList: MutableList<Account>
     private lateinit var foundBooks: MutableList<String>
@@ -61,8 +57,8 @@ class SearchFragment : Fragment() {
         textViewChose = view.findViewById(R.id.textViewChose)
         buttonSearch = view.findViewById(R.id.buttonSearch)
         listViewBooks = view.findViewById(R.id.listViewBooks)
-        listAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
-        listViewBooks.adapter = listAdapter
+        listAdapterSearch = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, mutableListOf())
+        listViewBooks.adapter = listAdapterSearch
         spinnerGenre = view.findViewById(R.id.spinnerGenre)
         val genres = arrayOf("Fantasy", "Science Fiction", "Romance", "Mystery", "Thriller", "Non-fiction")
         val adapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, genres)
@@ -78,7 +74,7 @@ class SearchFragment : Fragment() {
         })
 
         listViewBooks.setOnItemClickListener { parent, view, position, id ->
-            val selectedBook = listAdapter.getItem(position)
+            val selectedBook = listAdapterSearch.getItem(position)
 
             val regexPattern = "\"(.*?)\" - (.*?)\\s*\\n(.*?)\\s*\\nWłaściciel: (.*)".toRegex()
 
@@ -178,6 +174,7 @@ class SearchFragment : Fragment() {
     private fun findRelatedBooks() = CoroutineScope(Dispatchers.IO).launch{
         try{
             foundBooks = mutableListOf()
+            foundBooks.clear()
             for (user in nearbyUsersList) {
                 val querySnapshot = bookCollection.whereEqualTo("owner", user.username)
                     .whereEqualTo("genre", selectedGenre)
@@ -188,9 +185,9 @@ class SearchFragment : Fragment() {
                 }
             }
             withContext(Dispatchers.Main){
-                listAdapter.clear()
-                listAdapter.addAll(foundBooks)
-                listAdapter.notifyDataSetChanged()
+                listAdapterSearch.clear()
+                listAdapterSearch.addAll(foundBooks)
+                listAdapterSearch.notifyDataSetChanged()
             }
 
         }

@@ -1,13 +1,11 @@
 package com.example.booksharing.ui.borrowed
 
-import CustomAdapter
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,7 +27,7 @@ class BorrowedFragment : Fragment() {
     private lateinit var textViewBorrowed: TextView
     private lateinit var listViewBorrowed: ListView
     private lateinit var foundExchanges: MutableList<ExchangeHistory>
-    private lateinit var listAdapter: CustomAdapterSecond
+    private lateinit var listAdapterBorrowed: CustomAdapterSecond
     private var profileName:String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +40,8 @@ class BorrowedFragment : Fragment() {
         }
         textViewBorrowed= view.findViewById(R.id.textViewBorrowed)
         listViewBorrowed = view.findViewById(R.id.listViewBorrowed)
-        listAdapter = CustomAdapterSecond(requireContext(), R.layout.list_item_layout2, mutableListOf())
-        listViewBorrowed.adapter = listAdapter
+        listAdapterBorrowed = CustomAdapterSecond(requireContext(), R.layout.list_item_layout2, mutableListOf())
+        listViewBorrowed.adapter = listAdapterBorrowed
 
         showExchanges()
         return view
@@ -58,9 +56,9 @@ class BorrowedFragment : Fragment() {
                 foundExchanges.add(exchange)
             }
             withContext(Dispatchers.Main) {
-                listAdapter.clear()
-                listAdapter.addAll(foundExchanges)
-                listAdapter.notifyDataSetChanged()
+                listAdapterBorrowed.clear()
+                listAdapterBorrowed.addAll(foundExchanges)
+                listAdapterBorrowed.notifyDataSetChanged()
             }
         }
         catch (e: Exception){

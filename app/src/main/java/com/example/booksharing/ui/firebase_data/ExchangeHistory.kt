@@ -13,4 +13,10 @@ data class ExchangeHistory(
     fun getExchangeDescription():String{
         return "Użytkownik: $bookborrower chce pożyczyć Twoją książkę: \n \"$title\" - $author\n$date"
     }
+    fun getExchangeEndDescription():String{
+        return "Pożyczono książkę: \"$title\" - $author\n Od: $bookOwner\n Ocena właściciela: $ownerGrade"
+    }
+    fun getExchangePendingDescription():String{
+        return "Użytkownik: $bookborrower pożyczył książkę: \n \"$title\" - $author\n$date"
+    }
 }

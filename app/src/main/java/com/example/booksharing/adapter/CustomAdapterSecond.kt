@@ -60,7 +60,7 @@ class CustomAdapterSecond(context: Context, private val resource: Int, private v
 
         val exchangeHistory = getItem(position)
 
-        viewHolder.textView.text = exchangeHistory?.getExchangeDescription()
+        viewHolder.textView.text = exchangeHistory?.getExchangePendingDescription()
         viewHolder.buttonEnd.setOnClickListener {
             exchangeHistory?.let { endExchange(it) }
         }
