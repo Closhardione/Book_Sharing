@@ -123,17 +123,15 @@ class AppActivity : AppCompatActivity() {
             }
         }
     }
-    fun showNotification() {
+    private fun showNotification() {
         val context = this@AppActivity
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = "BookSharing_Channel"
-            val channelName = "BookSharing Notifications"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channelId = "BookSharing_Channel"
+        val channelName = "BookSharing Notifications"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
 
-            val notificationChannel = NotificationChannel(channelId, channelName, importance)
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
+        val notificationChannel = NotificationChannel(channelId, channelName, importance)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(context, "BookSharing_Channel")
             .setSmallIcon(R.drawable.ic_notification)
@@ -147,7 +145,9 @@ class AppActivity : AppCompatActivity() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(this@AppActivity, arrayOf(Manifest.permission.POST_NOTIFICATIONS),100)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ActivityCompat.requestPermissions(this@AppActivity, arrayOf(Manifest.permission.POST_NOTIFICATIONS),100)
+                }
                 return
             }
             notify(1, builder.build())

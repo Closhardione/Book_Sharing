@@ -51,7 +51,7 @@ class AccountFragment : Fragment() {
         profileName = arguments?.getString("username")
         if (profileName != null) {
             Log.d("TAG", profileName!!)
-            usernameTextView.setText(profileName)
+            usernameTextView.text = profileName
         }
         else{
             Log.e("tag","Error accessing username!")
@@ -67,11 +67,11 @@ class AccountFragment : Fragment() {
     private fun showExchanges() = CoroutineScope(Dispatchers.IO).launch{
         try {
             foundExchanges = mutableListOf()
-            var counter =0;
+            var counter =0
             val querySnapshot = exchangeHistoryCollection.whereEqualTo("bookborrower",profileName)
                 .whereEqualTo("state","zakończona").get().await()
             for(document in querySnapshot){
-                var exchange = document.toObject<ExchangeHistory>()
+                val exchange = document.toObject<ExchangeHistory>()
                 foundExchanges.add(exchange.getExchangeEndDescription())
                 counter++
                 finalGrade+=exchange.ownerGrade
@@ -79,7 +79,7 @@ class AccountFragment : Fragment() {
             }
             finalGrade /= counter
             withContext(Dispatchers.Main) {
-                textViewGrade.setText("Średnia ocena użytkowników - $finalGrade")
+                textViewGrade.text = "Średnia ocena użytkowników - $finalGrade"
                 listAdapterAccount.clear()
                 listAdapterAccount.addAll(foundExchanges)
                 listAdapterAccount.notifyDataSetChanged()

@@ -52,7 +52,7 @@ class BorrowedFragment : Fragment() {
             val querySnapshot = exchangeHistoryCollection.whereEqualTo("bookOwner",profileName)
                 .whereEqualTo("state","pożyczona").get().await()
             for(document in querySnapshot){
-                var exchange = document.toObject<ExchangeHistory>()
+                val exchange = document.toObject<ExchangeHistory>()
                 foundExchanges.add(exchange)
             }
             withContext(Dispatchers.Main) {

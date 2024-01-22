@@ -64,14 +64,14 @@ class SearchFragment : Fragment() {
         val adapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, genres)
         spinnerGenre.adapter = adapter
 
-        spinnerGenre.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        spinnerGenre.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedGenre = genres[position]
 
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
+        }
 
         listViewBooks.setOnItemClickListener { parent, view, position, id ->
             val selectedBook = listAdapterSearch.getItem(position)
@@ -167,7 +167,7 @@ class SearchFragment : Fragment() {
 
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "siema"+e.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -180,7 +180,7 @@ class SearchFragment : Fragment() {
                     .whereEqualTo("genre", selectedGenre)
                     .whereEqualTo("currentState","Posiadana").get().await()
                 for (document in querySnapshot) {
-                    var book = document.toObject<Book>()
+                    val book = document.toObject<Book>()
                     foundBooks.add(book.toStringBorrow())
                 }
             }
